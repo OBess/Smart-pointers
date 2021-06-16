@@ -9,7 +9,7 @@ public:
    // Constructors
    MyShared_ptr() noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
    MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
-   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)), m_counter(new size_t(1)) {}
+   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(ptr), m_counter(new size_t(1)) {}
 
    explicit MyShared_ptr(MyShared_ptr &&) = delete;
    explicit MyShared_ptr(MyShared_ptr &other) noexcept : m_ptr(other.m_ptr), m_counter(other.m_counter)
@@ -20,11 +20,11 @@ public:
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      --(*this->m_counter);
-      if (*this->m_counter == 0)
+      --(*m_counter);
+      if (*m_counter == 0)
       {
-         delete this->m_ptr;
-         delete this->m_counter;
+         delete m_ptr;
+         delete m_counter;
       }
    }
 
