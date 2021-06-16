@@ -54,6 +54,12 @@ public:
       return m_ptr;
    }
 
+   // Auxiliary opeartors
+   bool operator== (const MyUnique_ptr& other) const noexcept
+   {
+      return other.m_ptr == m_ptr;
+   }
+
    // Auxiliary methods
    const CObject const* get() const noexcept
    {
