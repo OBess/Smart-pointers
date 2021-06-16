@@ -9,20 +9,25 @@ class MyShared_ptr
 {
 public:
    // Constructors
-   MyShared_ptr() noexcept : m_ptr(nullptr) {}
-   MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr) {}
-   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)) {}
+   MyShared_ptr() noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
+   MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
+   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)), m_counter(new size_t(1)) {}
 
-   explicit MyShared_ptr(const MyShared_ptr &) = delete;
-   explicit MyShared_ptr(MyShared_ptr &&other) noexcept : m_ptr(other.m_ptr)
+   explicit MyShared_ptr(MyShared_ptr &&) = delete;
+   explicit MyShared_ptr(MyShared_ptr &other) noexcept : m_ptr(other.m_ptr), m_counter(other.m_counter)
    {
-      other.m_ptr = nullptr;
+      ++(*m_counter);
    }
 
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      delete this->m_ptr;
+      --(*this->m_counter);
+      if (*this->m_counter == 0)
+      {
+         delete this->m_ptr;
+         delete this->m_counter;
+      }
    }
 
    // Operators
@@ -33,13 +38,12 @@ public:
       return *this;
    }
 
-   MyShared_ptr &operator=(const MyShared_ptr &) = delete;
-   MyShared_ptr &operator=(MyShared_ptr &&other) noexcept
+   MyShared_ptr &operator=(MyShared_ptr &&) = delete;
+   MyShared_ptr &operator=(MyShared_ptr &other) noexcept
    {
-      delete m_ptr;
-
       m_ptr = other.m_ptr;
-      other.m_ptr = nullptr;
+      m_counter = other.m_counter;
+      ++(*m_counter);
 
       return *this;
    }
@@ -77,8 +81,15 @@ public:
       m_ptr = tmp;
    }
 
+   size_t counter() const noexcept
+   {
+      return *m_counter;
+   }
+
 private:
    CObject *m_ptr;
+
+   size_t *m_counter;
 };
 
 #endif //MY_SHARED_PTR_HPP
