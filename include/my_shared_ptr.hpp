@@ -3,28 +3,33 @@
 // Custom
 #include "cobject.hpp"
 
+struct controlBlock
+{
+   size_t counter = 1;
+};
+
 class MyShared_ptr
 {
 public:
    // Constructors
-   MyShared_ptr() noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
-   MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr), m_counter(new size_t(0)) {}
-   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(ptr), m_counter(new size_t(1)) {}
+   MyShared_ptr() noexcept : m_ptr(nullptr), m_controlBlock(new controlBlock) {}
+   MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr), m_controlBlock(new controlBlock) {}
+   explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(ptr), m_controlBlock(new controlBlock) {}
 
    explicit MyShared_ptr(MyShared_ptr &&) = delete;
-   explicit MyShared_ptr(MyShared_ptr &other) noexcept : m_ptr(other.m_ptr), m_counter(other.m_counter)
+   explicit MyShared_ptr(MyShared_ptr &other) noexcept : m_ptr(other.m_ptr), m_controlBlock(other.m_controlBlock)
    {
-      ++(*m_counter);
+      ++m_controlBlock->counter;
    }
 
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      --(*m_counter);
-      if (*m_counter == 0)
+      --m_controlBlock->counter;
+      if (m_controlBlock->counter == 0)
       {
          delete m_ptr;
-         delete m_counter;
+         delete m_controlBlock;
       }
    }
 
@@ -87,5 +92,5 @@ public:
 private:
    CObject *m_ptr;
 
-   size_t *m_counter;
+   controlBlock *m_controlBlock;
 };
