@@ -78,6 +78,49 @@ int main()
       assert(dynamic_cast<const Integer *>(ptr.get())->value() == 2);
       assert(*i == *dynamic_cast<const Integer *>(ptr.get()));
    }
+   {
+      Integer *i = new Integer(2);
+      MyUnique_ptr ptr(i);
+      MyUnique_ptr ptr1(std::move(ptr));
+      assert(ptr == nullptr);
+      assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 2);
+   }
+
+   // MyShared_ptr testing
+   {
+      MyShared_ptr ptr;
+      assert(ptr == nullptr);
+   }
+   {
+      MyShared_ptr ptr(nullptr);
+      assert(ptr == nullptr);
+   }
+   {
+      MyShared_ptr ptr(new Integer(12));
+      assert(dynamic_cast<const Integer *>(ptr.get())->value() == 12);
+      ptr.reset(new Integer(3));
+      assert(dynamic_cast<const Integer *>(ptr.get())->value() == 3);
+      assert(ptr->toString() == "3");
+   }
+   {
+      Integer *i = new Integer(2);
+      MyShared_ptr ptr(i);
+      assert(dynamic_cast<const Integer *>(ptr.get())->value() == 2);
+      assert(*i == *dynamic_cast<const Integer *>(ptr.get()));
+   }
+   {
+      Integer *i = new Integer(2);
+      MyShared_ptr ptr(i);
+      MyShared_ptr ptr1(ptr);
+      assert(!(ptr == nullptr));
+      assert(dynamic_cast<const Integer *>(ptr.get())->value() == 2);
+      assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 2);
+      assert(ptr.counter() == 2);
+
+      ptr.~MyShared_ptr();
+      assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 2);
+      assert(ptr1.counter() == 1);
+   }
 
    return EXIT_SUCCESS;
 }
