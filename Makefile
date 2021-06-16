@@ -60,6 +60,10 @@ test_gdb:
 gdb:
 	@gdb $(DEBUG_MODE)/$(EXECUTABLE)
 
+# Check memory leak
+valgrind:
+	@valgrind $(args) $(TEST_FOLDER_NAME)/$(TEST)
+
 # Remove folders with executable files
 clean: rm_debug rm_release rm_test
 
@@ -72,4 +76,4 @@ rm_release:
 rm_test:
 	@rm -rf $(TEST_FOLDER_NAME)
 
-.PHONY: all build run test test_gdb gdb clean rm_debug rm_release rm_test
+.PHONY: all build run test test_gdb gdb valgrid clean rm_debug rm_release rm_test
