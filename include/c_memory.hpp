@@ -3,22 +3,57 @@
 #define C_MEMORY_HPP
 
 // Custom
-#include "c_memory.hpp"
+#include "cobject.hpp"
 
-class MyUnuque_ptr
+class MyUnique_ptr
 {
 public:
+   // Constructors
+   MyUnique_ptr() noexcept : m_ptr(nullptr) {}
+   MyUnique_ptr(std::nullptr_t) noexcept : m_ptr(nullptr) {}
+   MyUnique_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)) {}
+
+   MyUnique_ptr(const MyUnique_ptr &) = delete;
+   MyUnique_ptr(MyUnique_ptr &&other) noexcept : m_ptr(other.m_ptr)
+   {
+      other.m_ptr = nullptr;
+   }
+
+   // Destructor
+   ~MyUnique_ptr() noexcept
+   {
+      delete this->m_ptr;
+   }
+
+   // Operators
+   MyUnique_ptr &operator=(std::nullptr_t) noexcept
+   {
+      delete m_ptr;
+      m_ptr = nullptr;
+      return *this;
+   }
+
+   MyUnique_ptr &operator=(const MyUnique_ptr &) = delete;
+   MyUnique_ptr &operator=(MyUnique_ptr &&other)
+   {
+      delete m_ptr;
+
+      m_ptr = other.m_ptr;
+      other.m_ptr = nullptr;
+
+      return *this;
+   }
+
+   
 
 private:
-
+   CObject *m_ptr;
 };
 
 class MyShared_ptr
 {
 public:
-
 private:
-
 };
 
 #endif //C_MEMORY_HPP
