@@ -11,10 +11,10 @@ public:
    // Constructors
    MyUnique_ptr() noexcept : m_ptr(nullptr) {}
    MyUnique_ptr(std::nullptr_t) noexcept : m_ptr(nullptr) {}
-   MyUnique_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)) {}
+   explicit MyUnique_ptr(CObject *ptr) noexcept : m_ptr(std::move(ptr)) {}
 
-   MyUnique_ptr(const MyUnique_ptr &) = delete;
-   MyUnique_ptr(MyUnique_ptr &&other) noexcept : m_ptr(other.m_ptr)
+   explicit MyUnique_ptr(const MyUnique_ptr &) = delete;
+   explicit MyUnique_ptr(MyUnique_ptr &&other) noexcept : m_ptr(other.m_ptr)
    {
       other.m_ptr = nullptr;
    }
