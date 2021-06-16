@@ -1,6 +1,4 @@
 #pragma once
-#ifndef MY_SHARED_PTR_HPP
-#define MY_SHARED_PTR_HPP
 
 // Custom
 #include "cobject.hpp"
@@ -91,5 +89,3 @@ private:
 
    size_t *m_counter;
 };
-
-#endif //MY_SHARED_PTR_HPP

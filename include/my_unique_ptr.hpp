@@ -1,6 +1,4 @@
 #pragma once
-#ifndef MY_UNIQUE_PTR_HPP
-#define MY_UNIQUE_PTR_HPP
 
 // Custom
 #include "cobject.hpp"
@@ -80,5 +78,3 @@ public:
 private:
    CObject *m_ptr;
 };
-
-#endif //MY_UNIQUE_PTR_HPP

@@ -1,6 +1,4 @@
 #pragma once
-#ifndef COBJECT_HPP
-#define COBJECT_HPP
 
 // C++
 #include <iostream>
@@ -34,5 +32,3 @@ private:
       return this->toString();
    }
 };
-
-#endif //COBJECT_HPP
