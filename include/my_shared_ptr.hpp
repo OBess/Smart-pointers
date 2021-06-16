@@ -44,13 +44,15 @@ public:
 
    MyShared_ptr &operator=(MyShared_ptr &&other)
    {
-
+      reset(other.m_ptr);
       return *this;
    }
 
    MyShared_ptr &operator=(const MyShared_ptr &other) noexcept
    {
-
+      reset(other.m_ptr);
+      delete m_controlBlock;
+      m_controlBlock = other.m_controlBlock;
       return *this;
    }
 
