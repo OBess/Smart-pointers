@@ -34,7 +34,7 @@ public:
    }
 
    MyUnique_ptr &operator=(const MyUnique_ptr &) = delete;
-   MyUnique_ptr &operator=(MyUnique_ptr &&other)
+   MyUnique_ptr &operator=(MyUnique_ptr &&other) noexcept
    {
       delete m_ptr;
 
@@ -44,7 +44,27 @@ public:
       return *this;
    }
 
-   
+   CObject& operator*() noexcept
+   {
+      return *m_ptr;
+   }
+
+   CObject* operator->() noexcept
+   {
+      return m_ptr;
+   }
+
+   // Auxiliary methods
+   const CObject const* get() const noexcept
+   {
+      return m_ptr;
+   }
+
+   void reset(CObject* tmp) noexcept
+   {
+      delete m_ptr;
+      tmp = m_ptr;
+   }
 
 private:
    CObject *m_ptr;
