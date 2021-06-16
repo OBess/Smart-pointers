@@ -44,32 +44,37 @@ public:
       return *this;
    }
 
-   CObject& operator*() noexcept
+   CObject &operator*() noexcept
    {
       return *m_ptr;
    }
 
-   CObject* operator->() noexcept
+   CObject *operator->() noexcept
    {
       return m_ptr;
    }
 
    // Auxiliary opeartors
-   bool operator== (const MyUnique_ptr& other) const noexcept
+   bool operator==(const MyUnique_ptr &other) const noexcept
    {
       return other.m_ptr == m_ptr;
    }
 
+   bool operator==(std::nullptr_t) const noexcept
+   {
+      return m_ptr == nullptr;
+   }
+
    // Auxiliary methods
-   const CObject const* get() const noexcept
+   const CObject *get() const noexcept
    {
       return m_ptr;
    }
 
-   void reset(CObject* tmp) noexcept
+   void reset(CObject *tmp) noexcept
    {
       delete m_ptr;
-      tmp = m_ptr;
+      m_ptr = tmp;
    }
 
 private:
