@@ -53,6 +53,9 @@ test:
 	@$(TEST_FOLDER_NAME)/$(TEST)
 	@echo "makefile: \033[;32mTesting successfully!\033[0m"
 
+test_gdb:
+	@gdb $(TEST_FOLDER_NAME)/$(TEST)
+
 # Debugging program
 gdb:
 	@gdb $(DEBUG_MODE)/$(EXECUTABLE)
@@ -69,4 +72,4 @@ rm_release:
 rm_test:
 	@rm -rf $(TEST_FOLDER_NAME)
 
-.PHONY: all build run test gdb clean rm_debug rm_release rm_test
+.PHONY: all build run test test_gdb gdb clean rm_debug rm_release rm_test
