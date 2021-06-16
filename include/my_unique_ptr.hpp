@@ -1,6 +1,6 @@
 #pragma once
-#ifndef C_MEMORY_HPP
-#define C_MEMORY_HPP
+#ifndef MY_UNIQUE_PTR_HPP
+#define MY_UNIQUE_PTR_HPP
 
 // Custom
 #include "cobject.hpp"
@@ -70,10 +70,4 @@ private:
    CObject *m_ptr;
 };
 
-class MyShared_ptr
-{
-public:
-private:
-};
-
-#endif //C_MEMORY_HPP
+#endif //MY_UNIQUE_PTR_HPP
