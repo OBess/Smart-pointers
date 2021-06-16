@@ -55,7 +55,7 @@ public:
 
    MyShared_ptr &operator=(const MyShared_ptr &other) noexcept
    {
-      
+
       return *this;
    }
 
@@ -88,7 +88,11 @@ public:
 
    void reset(CObject *tmp) noexcept
    {
-      
+      if (m_controlBlock->counter == 1)
+         delete m_ptr;
+      else
+         m_controlBlock = new controlBlock;
+      m_ptr = tmp;
    }
 
    size_t counter() const noexcept
@@ -98,6 +102,5 @@ public:
 
 private:
    CObject *m_ptr;
-
    controlBlock *m_controlBlock;
 };
