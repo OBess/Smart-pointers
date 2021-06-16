@@ -31,19 +31,14 @@ public:
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      --m_controlBlock->counter;
-      if (m_controlBlock->counter == 0)
-      {
-         delete m_ptr;
-         delete m_controlBlock;
-      }
+      reset(nullptr);
+      delete m_controlBlock;
    }
 
    // Operators
    MyShared_ptr &operator=(std::nullptr_t) noexcept
    {
-      delete m_ptr;
-      m_ptr = nullptr;
+      reset(nullptr);
       return *this;
    }
 
@@ -88,10 +83,15 @@ public:
 
    void reset(CObject *tmp) noexcept
    {
-      if (m_controlBlock->counter == 1)
+      --m_controlBlock->counter;
+
+      if (m_controlBlock->counter == 0)
+      {
          delete m_ptr;
-      else
-         m_controlBlock = new controlBlock;
+         delete m_controlBlock;
+      }
+      
+      m_controlBlock = new controlBlock;
       m_ptr = tmp;
    }
 
