@@ -97,6 +97,11 @@ int main()
    }
    {
       MyShared_ptr ptr(new Integer(12));
+      ptr = nullptr;
+      assert(ptr == nullptr);
+   }
+   {
+      MyShared_ptr ptr(new Integer(12));
       MyShared_ptr ptr1(ptr);
       assert(dynamic_cast<const Integer *>(ptr.get())->value() == 12);
       ptr.reset(new Integer(3));
