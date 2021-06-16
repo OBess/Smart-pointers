@@ -97,8 +97,10 @@ int main()
    }
    {
       MyShared_ptr ptr(new Integer(12));
+      MyShared_ptr ptr1(ptr);
       assert(dynamic_cast<const Integer *>(ptr.get())->value() == 12);
       ptr.reset(new Integer(3));
+      assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 12);
       assert(dynamic_cast<const Integer *>(ptr.get())->value() == 3);
       assert(ptr->toString() == "3");
    }
@@ -112,14 +114,15 @@ int main()
       Integer *i = new Integer(2);
       MyShared_ptr ptr(i);
       MyShared_ptr ptr1(ptr);
+      MyShared_ptr ptr2(ptr1);
       assert(!(ptr == nullptr));
       assert(dynamic_cast<const Integer *>(ptr.get())->value() == 2);
       assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 2);
-      assert(ptr.counter() == 2);
+      assert(ptr.counter() == 3);
 
       ptr.~MyShared_ptr();
       assert(dynamic_cast<const Integer *>(ptr1.get())->value() == 2);
-      assert(ptr1.counter() == 1);
+      assert(ptr1.counter() == 2);
    }
 
    return EXIT_SUCCESS;
