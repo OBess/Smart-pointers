@@ -12,8 +12,8 @@ class MyShared_ptr
 {
 public:
    // Constructors
-   MyShared_ptr() noexcept : m_ptr(nullptr), m_controlBlock(new controlBlock) {}
-   MyShared_ptr(std::nullptr_t) noexcept : m_ptr(nullptr), m_controlBlock(new controlBlock) {}
+   MyShared_ptr() noexcept {}
+   MyShared_ptr(std::nullptr_t) noexcept {}
    explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(ptr), m_controlBlock(new controlBlock) {}
 
    explicit MyShared_ptr(MyShared_ptr &&other) : m_ptr(other.m_ptr), m_controlBlock(other.m_controlBlock)
@@ -31,8 +31,7 @@ public:
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      reset(nullptr);
-      delete m_controlBlock;
+      reset();
    }
 
    // Operators
@@ -83,7 +82,17 @@ public:
       return m_ptr;
    }
 
-   void reset(CObject *tmp) noexcept
+   void reset(CObject *tmp)
+   {
+      reset();
+      if (tmp == nullptr)
+         return;
+
+      m_controlBlock = new controlBlock;
+      m_ptr = tmp;
+   }
+
+   void reset() noexcept
    {
       --m_controlBlock->counter;
 
@@ -92,17 +101,17 @@ public:
          delete m_ptr;
          delete m_controlBlock;
       }
-      
-      m_controlBlock = new controlBlock;
-      m_ptr = tmp;
+
+      m_ptr = nullptr;
+      m_controlBlock = nullptr;
    }
 
    size_t counter() const noexcept
    {
-      return m_controlBlock->counter;
+      return m_controlBlock ? m_controlBlock->counter : 0;
    }
 
 private:
-   CObject *m_ptr;
-   controlBlock *m_controlBlock;
+   CObject *m_ptr = nullptr;
+   controlBlock *m_controlBlock = nullptr;
 };
