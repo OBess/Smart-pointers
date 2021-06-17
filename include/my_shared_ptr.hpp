@@ -16,10 +16,8 @@ public:
    MyShared_ptr(std::nullptr_t) noexcept {}
    explicit MyShared_ptr(CObject *ptr) noexcept : m_ptr(ptr), m_controlBlock(new controlBlock) {}
 
-   explicit MyShared_ptr(MyShared_ptr &&other) : m_ptr(other.m_ptr), m_controlBlock(other.m_controlBlock)
+   explicit MyShared_ptr(MyShared_ptr &&other) noexcept : m_ptr(other.m_ptr), m_controlBlock(other.m_controlBlock)
    {
-      m_ptr = other.m_ptr;
-      m_controlBlock = other.m_controlBlock;
       other.m_ptr = nullptr;
       other.m_controlBlock = nullptr;
    };
@@ -37,7 +35,7 @@ public:
    // Operators
    MyShared_ptr &operator=(std::nullptr_t) noexcept
    {
-      reset(nullptr);
+      reset();
       return *this;
    }
 
@@ -49,8 +47,8 @@ public:
 
    MyShared_ptr &operator=(const MyShared_ptr &other) noexcept
    {
-      reset(other.m_ptr);
-      delete m_controlBlock;
+      reset();
+      m_ptr = other.m_ptr;
       m_controlBlock = other.m_controlBlock;
       return *this;
    }
