@@ -29,7 +29,8 @@ public:
    // Destructor
    ~MyShared_ptr() noexcept
    {
-      reset();
+      if (m_ptr)
+         reset();
    }
 
    // Operators
